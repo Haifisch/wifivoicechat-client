@@ -16,16 +16,16 @@
 
 static void glDC_FlushRangeOverrun(void *v,u32 size)
 {
-  static void (*lp_DC_FlushRange)(void *base, u32 size)=DC_FlushRange;
-  static void (*lp_DC_InvalidateRange)(void *base, u32 size)=DC_InvalidateRange;
+  //static void (*lp_DC_FlushRange)(void *base, u32 size)=DC_FlushRange;
+  //static void (*lp_DC_InvalidateRange)(void *base, u32 size)=DC_InvalidateRange;
   
   size&=~(CACHE_LINE_SIZE-1);
   size+=CACHE_LINE_SIZE;
   
   if(size==0) return;
   
-  lp_DC_FlushRange(v,size);
-  lp_DC_InvalidateRange(v,size);
+  DC_FlushRange(v,size);
+  DC_InvalidateRange(v,size);
 }
 
 void glMemCopy16CPU(void *src,void *dst,u32 len)

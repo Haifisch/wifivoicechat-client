@@ -51,7 +51,7 @@
 #define NDS_IPCEX_INCLUDE
 
 
-#include <nds/jtypes.h>
+#include <nds/ndstypes.h>
 
 #define PlayEnv_Speaker (0)
 #define PlayEnv_Headphone1 (1)
@@ -77,13 +77,33 @@ typedef struct {
 } TIPCEXTouchPad;
 
 //---------------------------------------------------------------------------------
+typedef struct sTransferSoundData {
+//---------------------------------------------------------------------------------
+	const void *data;
+	u32 len;
+	u32 rate;
+	u8 vol;
+	u8 pan;
+	u8 format;
+	u8 PADDING;
+} TransferSoundData, * pTransferSoundData;
+
+//---------------------------------------------------------------------------------
+typedef struct sTransferSound {
+//---------------------------------------------------------------------------------
+	TransferSoundData data[16];
+	u8 count;
+	u8 PADDING[3];
+} TransferSound, * pTransferSound;
+
+//---------------------------------------------------------------------------------
 typedef struct sTransferRegionEX {
 //---------------------------------------------------------------------------------
   u32 UserLanguage;       // from BIOS
   u32 PlayEnv;
   
   TIPCEXTouchPad IPCEXTouchPad;
-  
+  u32 heartbeat;
   u32 IR;
   
   s16 *pmicBuf;
@@ -91,9 +111,10 @@ typedef struct sTransferRegionEX {
   vu32 strpcmControl;
   vu32 strpcmFreq,strpcmSamples;
   s16 *pstrpcmBuf;
+  TransferSound *soundData;
 } TransferRegionEX, * pTransferRegionEX;
 
-#define IPCEX ((TransferRegionEX volatile *)(0x027FF000+sizeof(TransferRegion)))
+#define IPCEX ((TransferRegionEX volatile *)(0x027FF000+sizeof(TransferRegionEX)))
 
 #endif
 

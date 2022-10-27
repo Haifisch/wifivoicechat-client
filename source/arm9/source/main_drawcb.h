@@ -61,7 +61,8 @@ static void MWinCallAbout_Draw(u32 WinIndex)
       case 1: str=ROMDATE; break;
       case 2: str=ROMAUTHOR1; break;
       case 3: str=ROMAUTHOR2; break;
-      case 4: str=ROMENV; break;
+      case 4: str=ROMAUTHOR3; break;
+      case 5: str=ROMENV; break;
       
       default: str=""; break;
     }
@@ -474,7 +475,7 @@ static void MWinCallPicture_MouseDown(u32 WinIndex,s32 x,s32 y)
   }
 }
 
-static void MWinCallPicture_MouseMove(u32 WinIndex,s32 x,s32 y,bool CanIgnore)
+void MWinCallPicture_MouseMove(u32 WinIndex,s32 x,s32 y,bool CanIgnore)
 {
   u32 ofsx,ofsy;
   ofsx=MWin_GetSBarHPos(WM_Picture);
@@ -580,7 +581,7 @@ static void MWinCallItemPalette_MouseDown(u32 WinIndex,s32 x,s32 y)
   MWinCallItemPalette_MouseMove(WinIndex,x,y,false);
 }
 
-static void MWinCallItemPalette_MouseMove(u32 WinIndex,s32 x,s32 y,bool CanIgnore)
+void MWinCallItemPalette_MouseMove(u32 WinIndex,s32 x,s32 y,bool CanIgnore)
 {
   if((0<=y)&&(y<16)){
     s32 idx=x/16;
@@ -638,7 +639,7 @@ static void MWinCallColorPicker_MouseDown(u32 WinIndex,s32 x,s32 y)
   MWinCallColorPicker_MouseMove(WinIndex,x,y,false);
 }
 
-static void MWinCallColorPicker_MouseMove(u32 WinIndex,s32 x,s32 y,bool CanIgnore)
+void MWinCallColorPicker_MouseMove(u32 WinIndex,s32 x,s32 y,bool CanIgnore)
 {
   if(CanIgnore==true) return;
   

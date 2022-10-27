@@ -17,6 +17,7 @@
 #include <nds/bios.h>
 #include <nds/arm7/touch.h>
 #include <nds/arm7/clock.h>
+#include <nds/registers_alt.h>
 
 #include <dswifi7.h>
 
@@ -56,7 +57,7 @@ static void startSound(int sampleRate, const void* data, u32 bytes, u8 channel, 
 	SCHANNEL_TIMER(channel)  = SOUND_FREQ(sampleRate);
 	SCHANNEL_SOURCE(channel) = (u32)data;
 	SCHANNEL_LENGTH(channel) = bytes >> 2 ;
-	SCHANNEL_CR(channel)     = SCHANNEL_ENABLE | SOUND_ONE_SHOT | SOUND_VOL(vol) | SOUND_PAN(pan) | (format==1?SOUND_8BIT:SOUND_16BIT);
+	SCHANNEL_CR(channel)     = SCHANNEL_ENABLE | SOUND_ONE_SHOT | SOUND_VOL(vol) | SOUND_PAN(pan) | (format==1?SOUND_FORMAT_8BIT:SOUND_FORMAT_16BIT);
 }
 
 
@@ -74,14 +75,15 @@ static void VblankHandler_MainThread(void) {
 	uint16 but=0, x=0, y=0, xpx=0, ypx=0, z1=0, z2=0, batt=0, aux=0;
 	int t1=0, t2=0;
 	uint32 temp=0;
-	uint8 ct[sizeof(IPC->curtime)];
+	//uint8 ct[sizeof(IPCEX->curtime)];
 
 	// Read the touch screen
 	but = REG_KEYXY;
 
 	if (!(but & (1<<6))) {
 
-		touchPosition tempPos = touchReadXY();
+		touchPosition tempPos;
+    touchReadXY(&tempPos);
 
 //		x = tempPos.x;
 //		y = tempPos.y;
@@ -161,7 +163,7 @@ static void VblankHandler(void) {
 //---------------------------------------------------------------------------------
   VBlankApply=true;
   
-  IPC->heartbeat++;
+  //IPCEX->heartbeat++;
   VblankHandler_MainThread();
 //  IPCEX->IR=IR_vsync;
 //  REG_IPC_SYNC|=IPC_SYNC_IRQ_REQUEST;
@@ -202,7 +204,7 @@ static void strpcmPlay(void)
   SCHANNEL_TIMER(0)  = SOUND_FREQ(IPCEX->strpcmFreq*strpcmMultiple);
   SCHANNEL_SOURCE(0) = (u32)pstrpcmBuf;
   SCHANNEL_LENGTH(0) = (bytelen*2) >> 2 ; // for 16bit (4byte/1block)
-  SCHANNEL_CR(0)     = SCHANNEL_ENABLE | SOUND_REPEAT | SOUND_VOL(127) | SOUND_PAN(64) | SOUND_16BIT;
+  SCHANNEL_CR(0)     = SCHANNEL_ENABLE | SOUND_REPEAT | SOUND_VOL(127) | SOUND_PAN(64) | SOUND_FORMAT_16BIT;
   
   TIMER2_DATA = (0x10000 - ((16777216*2) / IPCEX->strpcmFreq));
   TIMER2_CR = TIMER_DIV_1;
@@ -359,13 +361,13 @@ static inline void load_PersonalData() {
 
 static inline void main_InitSoundDevice(void)
 {
-  powerON(POWER_SOUND);
+  powerOn(POWER_SOUND);
   SOUND_CR = SOUND_ENABLE | SOUND_VOL(0x7F);
   
   swiChangeSoundBias(1,0x400);
   a7SetSoundAmplifier(true);
   
-  IPC->soundData = 0;
+  IPCEX->soundData = 0;
   IPCEX->strpcmControl=strpcmControl_NOP;
 }
 
@@ -392,7 +394,7 @@ int main(int argc, char ** argv) {
   rtcReset();
   a7lcd_select(PM_BACKLIGHT_TOP | PM_BACKLIGHT_BOTTOM);
   
-  touchReadXY();
+  //touchReadXY();
   
   REG_SPICNT = SPI_ENABLE|SPI_CONTINUOUS|SPI_DEVICE_NVRAM;
   load_PersonalData();
@@ -455,9 +457,9 @@ int main(int argc, char ** argv) {
     }
     
     //sound code  :)
-    TransferSound *snd = IPC->soundData;
+    TransferSound *snd = IPCEX->soundData;
     if ((0 != snd)&&(snd->count!=0)) {
-      IPC->soundData = 0;
+      IPCEX->soundData = 0;
       u32 i;
       for (i=0; i<snd->count; i++) {
         s32 chan = getFreeSoundChannel();

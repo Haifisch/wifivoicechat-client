@@ -20,9 +20,10 @@ static u32 DMAFIXSRC;
 #define memchk if(false)
 
 void DC_FlushRangeOverrun(const void *v,u32 size)
-{memchk{ if(v==NULL){ _consolePrintf("Hooked memory address error.%s%d\n",__FILE__,__LINE__); while(1); } }
-  static void (*lp_DC_FlushRange)(void *base, u32 size)=DC_FlushRange;
-  static void (*lp_DC_InvalidateRange)(void *base, u32 size)=DC_InvalidateRange;
+{
+  memchk{ if(v==NULL){ _consolePrintf("Hooked memory address error.%s%d\n",__FILE__,__LINE__); while(1); } }
+  //static void (*lp_DC_FlushRange)(void *base, u32 size)=DC_FlushRange;
+  //static void (*lp_DC_InvalidateRange)(void *base, u32 size)=DC_InvalidateRange;
   
   void *pv=(void*)v;
   
@@ -32,8 +33,8 @@ void DC_FlushRangeOverrun(const void *v,u32 size)
   if(v==NULL) return;
   if(size==0) return;
   
-  lp_DC_FlushRange(pv,size);
-  lp_DC_InvalidateRange(pv,size);
+  DC_FlushRange(pv,size);
+  DC_InvalidateRange(pv,size);
 }
 
 void MemCopy8CPU(const void *src,void *dst,u32 len)

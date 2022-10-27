@@ -20,6 +20,12 @@
 
 ---------------------------------------------------------------------------------*/
 #include <nds.h>
+#include <nds/registers_alt.h>
+
+#define POWER_CR        REG_POWERCNT
+#define BG_256_COLOR   (BIT(7))
+#define BG_16_COLOR    (0)
+
 #include "../../ipcex.h"
 
 #include <stdio.h>
@@ -142,7 +148,7 @@ int main(void) {
   glDefaultClassCreate();
   pScreenMain->SetWideFlag(true);
   
-  _consolePrintf("boot %s %s\n%s\n%s\n%s\n%s\n\n",ROMTITLE,ROMVERSION,ROMDATE,ROMAUTHOR1,ROMAUTHOR2,ROMENV);
+  _consolePrintf("boot %s %s\n%s\n%s\n%s\n%s\n%s\n\n",ROMTITLE,ROMVERSION,ROMDATE,ROMAUTHOR1,ROMAUTHOR2,ROMAUTHOR3,ROMENV);
   
   SetARM9_REG_WaitCR();
   
@@ -520,7 +526,7 @@ static void mainloop_SetLatency(void)
   
   MWin_ProgressShow("Connecting to server...","サーバに接続しています…",1);
   
-  u32 lasthb=IPC->heartbeat;
+  u32 lasthb=IPCEX->heartbeat;
   
   while(1){
     if(timeout<=0){
@@ -530,8 +536,8 @@ static void mainloop_SetLatency(void)
       SendPacketToServer_ExecSend();
       timeout=60;
       }else{
-      if(lasthb!=IPC->heartbeat){
-        lasthb=IPC->heartbeat;
+      if(lasthb!=IPCEX->heartbeat){
+        lasthb=IPCEX->heartbeat;
         timeout--;
       }
     }
@@ -554,7 +560,7 @@ static void mainloop_GetDSScr(void)
   MWin_ProgressShow("Get previous screen","画像を準備しています…",DSScrYCount);
   
   u32 lastprgpos=0;
-  u32 lasthb=IPC->heartbeat;
+  u32 lasthb=IPCEX->heartbeat;
   
   while(1){
     if(timeout<=0){
@@ -566,8 +572,8 @@ static void mainloop_GetDSScr(void)
       SendPacketToServer_ExecSend();
       timeout=60;
       }else{
-      if(lasthb!=IPC->heartbeat){
-        lasthb=IPC->heartbeat;
+      if(lasthb!=IPCEX->heartbeat){
+        lasthb=IPCEX->heartbeat;
         timeout--;
       }
     }
@@ -862,7 +868,7 @@ void mainloop(void)
   }
 #endif
   
-  irqSet(IRQ_IPC_SYNC,(VoidFunctionPointer)InterruptHandler_IPC_SYNC);
+  irqSet(IRQ_IPC_SYNC,(VoidFn)InterruptHandler_IPC_SYNC);
   REG_IPC_SYNC=IPC_SYNC_IRQ_ENABLE;
   
   { // start mic
@@ -890,13 +896,13 @@ void mainloop(void)
   
   pScreenMain->Flip(true);
   
-  u32 lasthb=IPC->heartbeat>>4;
+  u32 lasthb=IPCEX->heartbeat>>4;
   
   while(1){
     if(VBlankPassed==true){
       VBlankPassed=false;
       Proc_TouchPad();
-      u32 hb=IPC->heartbeat>>4;
+      u32 hb=IPCEX->heartbeat>>4;
       if(lasthb!=hb){
         lasthb=hb;
         SendPacketToServer_ExecSend();

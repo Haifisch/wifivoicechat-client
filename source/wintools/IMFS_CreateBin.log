@@ -1,0 +1,70 @@
+ImplantFilesystem CreateBin
+ver 0.2
+
+binfn:IMFSROM.bin
+Sizekb:0(0byte)
+ArcPath:files\
+
+ReservedArea=0byte
+Create FileSystem
+search files\*.*
+load files\*.*
+path files\.. 0
+path files\shell 0
+path files\shell\.. 1
+path files\shell\se 1
+path files\shell\skin 1
+load ZLIB files\shell\ColPickB128.b15 32774->11972byte
+load Flat files\shell\global.ini 2byte
+load ZLIB files\shell\ItemPalette.b15 3590->220byte
+load ZLIB files\shell\system.fon 462984->166784byte
+path files\shell\se\.. 2
+load Flat files\shell\se\error.wav 105072byte
+load Flat files\shell\se\execute.wav 8252byte
+load Flat files\shell\se\process.wav 81912byte
+load Flat files\shell\se\winclose.wav 77684byte
+path files\shell\skin\.. 3
+load Flat files\shell\skin\client.bmp 60byte
+load Flat files\shell\skin\closebtn.bmp 672byte
+load Flat files\shell\skin\prgbara.bmp 4224byte
+load Flat files\shell\skin\prgbard.bmp 4224byte
+load Flat files\shell\skin\readme.txt 271byte
+load Flat files\shell\skin\sb_bg.bmp 156byte
+load Flat files\shell\skin\sb_body.bmp 172byte
+load Flat files\shell\skin\sb_part.bmp 284byte
+load Flat files\shell\skin\skin.ini 1667byte
+load Flat files\shell\skin\titlea.bmp 4408byte
+load Flat files\shell\skin\titled.bmp 4944byte
+MultiHashCount=21
+writepath 0 \ 0 2 (\)
+writepath 1 \shell 2 7 (\shell)
+writepath 2 \shell\se 9 5 (\shell\se)
+writepath 3 \shell\skin 14 12 (\shell\skin)
+writefile 0 0 .. 0 (..)
+writefile 1 0 shell 0 (shell)
+writefile 2 0 shell\.. 1 (shell\..)
+writefile 3 0 shell\se 1 (shell\se)
+writefile 4 0 shell\skin 1 (shell\skin)
+writefile 5 4 shell\ColPickB128.b15 1 (shell\ColPickB128.b15)
+writefile 6 1 shell\global.ini 1 (shell\global.ini)
+writefile 7 4 shell\ItemPalette.b15 1 (shell\ItemPalette.b15)
+writefile 8 4 shell\system.fon 1 (shell\system.fon)
+writefile 9 0 shell\se\.. 2 (shell\se\..)
+writefile 10 1 shell\se\error.wav 2 (shell\se\error.wav)
+writefile 11 1 shell\se\execute.wav 2 (shell\se\execute.wav)
+writefile 12 1 shell\se\process.wav 2 (shell\se\process.wav)
+writefile 13 1 shell\se\winclose.wav 2 (shell\se\winclose.wav)
+writefile 14 0 shell\skin\.. 3 (shell\skin\..)
+writefile 15 1 shell\skin\client.bmp 3 (shell\skin\client.bmp)
+writefile 16 1 shell\skin\closebtn.bmp 3 (shell\skin\closebtn.bmp)
+writefile 17 1 shell\skin\prgbara.bmp 3 (shell\skin\prgbara.bmp)
+writefile 18 1 shell\skin\prgbard.bmp 3 (shell\skin\prgbard.bmp)
+writefile 19 1 shell\skin\readme.txt 3 (shell\skin\readme.txt)
+writefile 20 1 shell\skin\sb_bg.bmp 3 (shell\skin\sb_bg.bmp)
+writefile 21 1 shell\skin\sb_body.bmp 3 (shell\skin\sb_body.bmp)
+writefile 22 1 shell\skin\sb_part.bmp 3 (shell\skin\sb_part.bmp)
+writefile 23 1 shell\skin\skin.ini 3 (shell\skin\skin.ini)
+writefile 24 1 shell\skin\titlea.bmp 3 (shell\skin\titlea.bmp)
+writefile 25 1 shell\skin\titled.bmp 3 (shell\skin\titled.bmp)
+UsedArea 474712byte
+Terminate.

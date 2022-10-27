@@ -90,7 +90,7 @@ void _StopRecording();
 /* This must be called during IRQ_TIMER0 */
 //void _ProcessMicrophoneTimerIRQ();
 
-void _PM_SetAmp(u8 control);
+void PM_SetAmp(u8 control);
 
 //---------------------------------------------------------------------------------
 // Turn the microphone on 

@@ -173,13 +173,9 @@ bool CIMFS::InitEXFS(void)
   
   u32 *pAreaSearch;
   
-  {
-    extern u32 __appended_data;
-    u32 adr;
-    adr=(u32)&__appended_data-0x02000000;
-    pAreaSearch=(u32*)((0x08000000+adr) & 0xffffff00);
-  }
-  
+  u32 adr;
+  adr=(u32)0x02000000;
+  pAreaSearch=(u32*)((0x08000000+adr) & 0xffffff00);
   while(1){
     if(pAreaSearch[1]==IMFS_VersionID){
       if(pAreaSearch[0]==MagicID){

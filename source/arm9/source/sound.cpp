@@ -11,6 +11,7 @@
 #include "shell.h"
 
 #include "sound.h"
+#include "../../ipcex.h"
 
 static TransferSound staticTransferSound;
 
@@ -186,7 +187,7 @@ static void LoadWaveFile(TSound *pSnd,u8 *pbuf,u32 bufsize)
 static void playSoundBlock(TransferSound *snd)
 {
   DC_FlushRange( snd, sizeof(TransferSound) );
-  IPC->soundData = snd;
+  IPCEX->soundData = snd;
 }
 
 void Sound_Init(void)

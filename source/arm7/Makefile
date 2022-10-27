@@ -24,17 +24,17 @@ DATA		:=
 #---------------------------------------------------------------------------------
 ARCH	:=	-mthumb-interwork
 
-CFLAGS	:=	-Wall -O3\
+CFLAGS	:=	-g -Wall -O2\
 		-mcpu=arm7tdmi -mtune=arm7tdmi -fomit-frame-pointer\
 		-ffast-math \
 		$(ARCH)
 
 CFLAGS	+=	$(INCLUDE) -DARM7
-CXXFLAGS	:=	$(CFLAGS)
+CXXFLAGS	:=	$(CFLAGS) -fno-rtti -fno-exceptions -fno-rtti
 
 
 ASFLAGS	:=	-g $(ARCH)
-LDFLAGS	=	-specs=ds_arm7.specs -g $(ARCH) -mno-fpu -Wl,-Map,$(notdir $*).map
+LDFLAGS	=	-specs=ds_arm7.specs -g $(ARCH) -Wl,-Map,$(notdir $*).map
 
 LIBS	:= -lnds7 -ldswifi7
 
@@ -53,7 +53,7 @@ ifneq ($(BUILD),$(notdir $(CURDIR)))
 #---------------------------------------------------------------------------------
  
 export ARM7BIN	:=	$(TOPDIR)/$(TARGET).arm7
-export ARM7ELF	:=	$(CURDIR)/$(TARGET).arm7.elf
+export ARM7ELF	:=	$(TOPDIR)/$(TARGET).arm7.elf
 export DEPSDIR	:=	$(CURDIR)/$(BUILD)
 
 export VPATH	:=	$(foreach dir,$(SOURCES),$(CURDIR)/$(dir))
@@ -92,13 +92,13 @@ endif
 $(BUILD):
 	@[ -d $@ ] || mkdir -p $@
 	@make --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
- 
+
 #---------------------------------------------------------------------------------
 clean:
 	@echo clean ...
 	@rm -fr $(BUILD) *.elf
- 
- 
+
+
 #---------------------------------------------------------------------------------
 else
  
@@ -110,7 +110,6 @@ DEPENDS	:=	$(OFILES:.o=.d)
 $(ARM7BIN)	:	$(ARM7ELF)
 	@$(OBJCOPY) -O binary $< $@
 	@echo built ... $(notdir $@)
-
 
 $(ARM7ELF)	:	$(OFILES)
 	@echo linking $(notdir $@)
@@ -126,7 +125,7 @@ $(ARM7ELF)	:	$(OFILES)
 	@$(bin2o)
 
 -include $(DEPENDS)
- 
+
 #---------------------------------------------------------------------------------------
 endif
 #---------------------------------------------------------------------------------------

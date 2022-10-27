@@ -41,7 +41,7 @@
 
 ---------------------------------------------------------------------------------*/
 #include <nds.h>
-#include <nds/jtypes.h>
+#include <nds/ndstypes.h>
 
 #include "_microphone.h"
 #include "../../ipcex.h"
@@ -53,7 +53,7 @@
 //---------------------------------------------------------------------------------
 // Turn on the Microphone Amp. Code based on neimod's example.
 //---------------------------------------------------------------------------------
-void _PM_SetAmp(u8 control) {
+void PM_SetAmp(u8 control) {
 //---------------------------------------------------------------------------------
 	SerialWaitBusy();
 	REG_SPICNT = SPI_ENABLE | SPI_DEVICE_POWER | SPI_BAUD_1MHz | SPI_CONTINUOUS;

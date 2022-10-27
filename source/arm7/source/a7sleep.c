@@ -68,8 +68,8 @@ void a7poff(void)
 void a7SetSoundAmplifier(bool e)
 {
 	u8 control;
-	control = PM_GetRegister(0) & ~PM_SOUND_PWR;
-	if(e==true) control|=PM_SOUND_PWR;
+	control = PM_GetRegister(0) & ~PM_SOUND_AMP;
+	if(e==true) control|=PM_SOUND_AMP;
 	PM_SetRegister(0, control&255);
 }
 
